@@ -57,7 +57,7 @@ suite("Functional Tests", function () {
             })
             .end(function (err, res) {
               assert.equal(res.status, 200);
-              assert.isArray(res.body);
+              assert.isObject(res.body);
               assert.equal("hoi", 2);
               done(err);
             });
