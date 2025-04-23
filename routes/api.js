@@ -10,7 +10,7 @@
 
 const { response } = require("../server");
 
-module.exports = function (app) {
+module.exports = function (app, myDataBase) {
   app
     .route("/api/books")
     .get(function (req, res) {
