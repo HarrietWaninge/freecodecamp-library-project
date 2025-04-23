@@ -33,16 +33,40 @@ suite("Functional Tests", function () {
   /*
    * ----[END of EXAMPLE TEST]----
    */
+  function createRandomString(length) {
+    const chars =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let result = "";
+    for (let i = 0; i < length; i++) {
+      result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return result;
+  }
 
   suite("Routing tests", function () {
-    //     suite('POST /api/books with title => create book object/expect book object', function() {
-    //       test('Test POST /api/books with title', function(done) {
-    //         //done();
-    //       });
-    //       test('Test POST /api/books with no title given', function(done) {
-    //         //done();
-    //       });
-    //     });
+    suite(
+      "POST /api/books with title => create book object/expect book object",
+      function () {
+        test("Test POST /api/books with title", function (done) {
+          chai
+            .request(server)
+            .keepOpen()
+            .post("/api/books")
+            .send({
+              title: createRandomString(8),
+            })
+            .end(function (err, res) {
+              assert.equal(res.status, 200);
+              assert.isArray(res.body);
+              assert.equal("hoi", 2);
+              done(err);
+            });
+        });
+        //       test('Test POST /api/books with no title given', function(done) {
+        //         //done();
+        //       });
+      }
+    );
     //     suite('GET /api/books => array of books', function(){
     //       test('Test GET /api/books',  function(done){
     //         //done();
