@@ -56,9 +56,11 @@ suite("Functional Tests", function () {
               title: createRandomString(8),
             })
             .end(function (err, res) {
+              console.log(res.body);
               assert.equal(res.status, 200);
-              assert.isObject(res.body);
-              assert.equal("hoi", 2);
+              assert.isArray(res.body);
+              assert.hasAllKeys("_id", "title", "commentcount");
+
               done(err);
             });
         });

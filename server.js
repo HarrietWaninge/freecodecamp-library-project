@@ -21,8 +21,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 db(async (client) => {
   const myDataBase = await client.db("Library").collection("Books");
-
+  //Routing for API
   apiRoutes(app, myDataBase);
+  //404 Not Found Middleware
   app.use(function (req, res, next) {
     res.status(404).type("text").send("Not Found");
   });
@@ -49,9 +50,5 @@ app.route("/").get(function (req, res) {
 });
 //For FCC testing purposes
 fccTestingRoutes(app);
-
-//Routing for API
-
-//404 Not Found Middleware
 
 module.exports = app; //for unit/functional testing
