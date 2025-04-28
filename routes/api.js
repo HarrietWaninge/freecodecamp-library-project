@@ -14,7 +14,10 @@ const BookController = require("./../controllers/bookController.js");
 module.exports = function (app) {
   app
     .route("/api/books")
-    .get(function (req, res) {
+    .get(async function (req, res) {
+      const allBooks = await BookController.getAllBooks(req);
+      // console.log("allbooks", allBooks);
+      res.json(allBooks);
       //response will be array of book objects
       //json res format: [{"_id": bookid, "title": book_title, "commentcount": num_of_comments },...]
     })

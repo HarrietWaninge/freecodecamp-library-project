@@ -15,6 +15,13 @@ class BookController {
       return "missing required field title";
     }
   }
+
+  async getAllBooks(req) {
+    let db = req.app.locals.myDataBase;
+    let listOfBooks = await db.find().toArray();
+    //console.log("listOfBooks", listOfBooks);
+    return listOfBooks;
+  }
 }
 
 module.exports = new BookController();

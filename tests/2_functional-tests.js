@@ -79,24 +79,41 @@ suite("Functional Tests", function () {
               assert.equal(res.status, 200);
               assert.isString(res.body);
               assert.equal(res.body, "missing required field title");
+              done();
             });
-          done();
         });
       }
     );
-    //     suite('GET /api/books => array of books', function(){
-    //       test('Test GET /api/books',  function(done){
-    //         //done();
-    //       });
-    //     });
-    //     suite('GET /api/books/[id] => book object with [id]', function(){
-    //       test('Test GET /api/books/[id] with id not in db',  function(done){
-    //         //done();
-    //       });
-    //       test('Test GET /api/books/[id] with valid id in db',  function(done){
-    //         //done();
-    //       });
-    //     });
+    suite("GET /api/books => array of books", function () {
+      test("Test GET /api/books", function (done) {
+        chai
+          .request(server)
+          .keepOpen()
+          .get("/api/books")
+          .end(function (err, res) {
+            assert.equal(res.status, 200);
+            console.log(res.body);
+            assert.isArray(res.body);
+            if (res.body.length !== 0) {
+              const firstBook = res.body[0];
+              assert.containsAllKeys(firstBook, [
+                "_id",
+                "title",
+                "commentCount",
+              ]);
+            }
+            done();
+          });
+      });
+    });
+    suite("GET /api/books/[id] => book object with [id]", function () {
+      // test("Test GET /api/books/[id] with id not in db", function (done) {
+      //   done();
+      // });
+      // test("Test GET /api/books/[id] with valid id in db", function (done) {
+      //   //done();
+      // });
+    });
     //     suite('POST /api/books/[id] => add comment/expect book object with id', function(){
     //       test('Test POST /api/books/[id] with comment', function(done){
     //         //done();
