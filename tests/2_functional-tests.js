@@ -59,7 +59,11 @@ suite("Functional Tests", function () {
               console.log(res.body);
               assert.equal(res.status, 200);
               assert.isArray(res.body);
-              assert.hasAllKeys("_id", "title", "commentcount");
+              assert.containsAllKeys(res.body[0], [
+                "_id",
+                "title",
+                "commentCount",
+              ]);
 
               done(err);
             });

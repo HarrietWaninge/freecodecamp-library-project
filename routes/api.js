@@ -9,8 +9,9 @@
 "use strict";
 
 const { response } = require("../server");
+const BookController = require("./../controllers/bookController.js");
 
-module.exports = function (app, myDataBase) {
+module.exports = function (app) {
   app
     .route("/api/books")
     .get(function (req, res) {
@@ -18,13 +19,13 @@ module.exports = function (app, myDataBase) {
       //json res format: [{"_id": bookid, "title": book_title, "commentcount": num_of_comments },...]
     })
 
-    .post(function (req, res) {
+    .post(async function (req, res) {
       try {
         let title = req.body.title;
-        console.log("Title:", title);
-        let response = { title: "hoiii" };
-
-        res.json(response);
+        //console.log("Title:", title);
+        let response = await BookController.logBook(req);
+        // console.log("resp", response);
+        res.json(response); //;
       } catch (e) {
         console.error(e);
       }

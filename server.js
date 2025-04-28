@@ -22,7 +22,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 db(async (client) => {
   const myDataBase = await client.db("Library").collection("Books");
   //Routing for API
-  apiRoutes(app, myDataBase);
+  apiRoutes(app);
+  app.locals.myDataBase = myDataBase;
   //404 Not Found Middleware
   app.use(function (req, res, next) {
     res.status(404).type("text").send("Not Found");
