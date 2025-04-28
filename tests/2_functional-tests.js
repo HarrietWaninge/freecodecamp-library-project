@@ -56,7 +56,7 @@ suite("Functional Tests", function () {
               title: createRandomString(8),
             })
             .end(function (err, res) {
-              console.log(res.body);
+              // console.log(res.body);
               assert.equal(res.status, 200);
               assert.isArray(res.body);
               assert.containsAllKeys(res.body[0], [
@@ -68,9 +68,20 @@ suite("Functional Tests", function () {
               done(err);
             });
         });
-        //       test('Test POST /api/books with no title given', function(done) {
-        //         //done();
-        //       });
+        test("Test POST /api/books with no title given", function (done) {
+          chai
+            .request(server)
+            .keepOpen()
+            .post("/api/books")
+            .send({})
+            .end(function (err, res) {
+              // console.log(res.body);
+              assert.equal(res.status, 200);
+              assert.isString(res.body);
+              assert.equal(res.body, "missing required field title");
+            });
+          done();
+        });
       }
     );
     //     suite('GET /api/books => array of books', function(){
