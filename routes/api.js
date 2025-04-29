@@ -44,11 +44,15 @@ module.exports = function (app) {
 
   app
     .route("/api/books/:id")
-    .get(function (req, res) {
+    .get(async function (req, res) {
       try {
       } catch (e) {}
 
-      let bookid = req.params.id;
+      let bookId = req.params.id;
+      // console.log("bookid", bookId);
+      let response = await BookController.getBookById(req);
+      // console.log("resp", response);
+      res.json(response);
       //json res format: {"_id": bookid, "title": book_title, "comments": [comment,comment,...]}
     })
 

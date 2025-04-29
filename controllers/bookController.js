@@ -1,3 +1,5 @@
+const { ObjectId } = require("mongodb");
+
 class BookController {
   async logBook(req) {
     //console.log("reqbody", req.body);
@@ -21,6 +23,21 @@ class BookController {
     let listOfBooks = await db.find().toArray();
     //console.log("listOfBooks", listOfBooks);
     return listOfBooks;
+  }
+
+  async getBookById(req) {
+    let db = req.app.locals.myDataBase;
+    let book;
+    try {
+      book = await db.findOne({ _id: new ObjectId(req.params.id) });
+
+      if (!book) {
+        return "no book exists";
+      }
+    } catch (e) {
+      console.log("error", e);
+    }
+    // console.log("book", book);
   }
 }
 

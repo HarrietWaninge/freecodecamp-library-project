@@ -79,7 +79,7 @@ suite("Functional Tests", function () {
               assert.equal(res.status, 200);
               assert.isString(res.body);
               assert.equal(res.body, "missing required field title");
-              done();
+              done(err);
             });
         });
       }
@@ -102,14 +102,24 @@ suite("Functional Tests", function () {
                 "commentCount",
               ]);
             }
-            done();
+            done(err);
           });
       });
     });
     suite("GET /api/books/[id] => book object with [id]", function () {
-      // test("Test GET /api/books/[id] with id not in db", function (done) {
-      //   done();
-      // });
+      test("Test GET /api/books/[id] with id not in db", function (done) {
+        chai
+          .request(server)
+          .keepOpen()
+          .get("/api/books/680f8036fd4423904358a473")
+          .end(function (err, res) {
+            //     console.log("???WAT?", res.body);
+            assert.equal(res.status, 200);
+            assert.isString(res.body);
+            assert.equal(res.body, "no book exists");
+            done(err);
+          });
+      });
       // test("Test GET /api/books/[id] with valid id in db", function (done) {
       //   //done();
       // });
