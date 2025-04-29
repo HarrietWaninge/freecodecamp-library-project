@@ -42,7 +42,8 @@ suite("Functional Tests", function () {
     }
     return result;
   }
-
+  const properties = ["_id", "title", "commentCount"];
+  let sampleBook;
   suite("Routing tests", function () {
     suite(
       "POST /api/books with title => create book object/expect book object",
@@ -92,15 +93,12 @@ suite("Functional Tests", function () {
           .get("/api/books")
           .end(function (err, res) {
             assert.equal(res.status, 200);
-            console.log(res.body);
+            // console.log(res.body);
             assert.isArray(res.body);
             if (res.body.length !== 0) {
               const firstBook = res.body[0];
-              assert.containsAllKeys(firstBook, [
-                "_id",
-                "title",
-                "commentCount",
-              ]);
+              sampleBook = firstBook; //set sampleBook for test later on
+              assert.containsAllKeys(firstBook, properties);
             }
             done(err);
           });
@@ -120,9 +118,19 @@ suite("Functional Tests", function () {
             done(err);
           });
       });
-      // test("Test GET /api/books/[id] with valid id in db", function (done) {
-      //   //done();
-      // });
+      test("Test GET /api/books/[id] with valid id in db", function (done) {
+        chai
+          .request(server)
+          .keepOpen()
+          .get(`/api/books/${sampleBook._id}`)
+          .end(function (err, res) {
+            assert.equal(res.status, 200);
+            assert.isObject(res.body);
+            assert.containsAllKeys(res.body, properties);
+            console.log(res.body);
+            done(err);
+          });
+      });
     });
     //     suite('POST /api/books/[id] => add comment/expect book object with id', function(){
     //       test('Test POST /api/books/[id] with comment', function(done){

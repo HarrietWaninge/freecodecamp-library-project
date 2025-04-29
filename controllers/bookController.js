@@ -37,7 +37,8 @@ class BookController {
     } catch (e) {
       console.log("error", e);
     }
-    // console.log("book", book);
+    console.log("book", book);
+    return book;
   }
 }
 
