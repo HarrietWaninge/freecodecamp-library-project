@@ -56,12 +56,13 @@ module.exports = function (app) {
       //json res format: {"_id": bookid, "title": book_title, "comments": [comment,comment,...]}
     })
 
-    .post(function (req, res) {
-      let bookid = req.params.id;
-      let comment = req.body.comment;
+    .post(async function (req, res) {
+      let book;
       try {
+        book = await BookController.commentOnBook(req);
       } catch (e) {}
 
+      res.json(book);
       //json res format same as .get
     })
 

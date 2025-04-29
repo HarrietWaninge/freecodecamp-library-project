@@ -127,22 +127,40 @@ suite("Functional Tests", function () {
             assert.equal(res.status, 200);
             assert.isObject(res.body);
             assert.containsAllKeys(res.body, properties);
-            console.log(res.body);
+            // console.log(res.body);
             done(err);
           });
       });
     });
-    //     suite('POST /api/books/[id] => add comment/expect book object with id', function(){
-    //       test('Test POST /api/books/[id] with comment', function(done){
-    //         //done();
-    //       });
-    //       test('Test POST /api/books/[id] without comment field', function(done){
-    //         //done();
-    //       });
-    //       test('Test POST /api/books/[id] with comment, id not in db', function(done){
-    //         //done();
-    //       });
-    //     });
+    suite(
+      "POST /api/books/[id] => add comment/expect book object with id",
+      function () {
+        test("Test POST /api/books/[id] with comment", function (done) {
+          chai
+            .request(server)
+            .keepOpen()
+            .post(`/api/books/${sampleBook._id}`)
+            .send({ comment: createRandomString(7) })
+            .end(function (err, res) {
+              assert.equal(res.status, 200);
+              assert.isObject(res.body);
+              assert.containsAllKeys(res.body, [
+                ...properties,
+                "comments",
+                "commentCount",
+              ]);
+              assert.equal(res.body.comments.length, res.body.commentCount);
+              done(err);
+            });
+        });
+        //       test('Test POST /api/books/[id] without comment field', function(done){
+        //         //done();
+        //       });
+        //       test('Test POST /api/books/[id] with comment, id not in db', function(done){
+        //         //done();
+      }
+    );
+    //      });
     //     suite('DELETE /api/books/[id] => delete book object id', function() {
     //       test('Test DELETE /api/books/[id] with valid id in db', function(done){
     //         //done();

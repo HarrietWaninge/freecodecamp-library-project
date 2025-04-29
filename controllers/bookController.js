@@ -1,4 +1,4 @@
-const { ObjectId } = require("mongodb");
+const { ObjectId, ReturnDocument } = require("mongodb");
 
 class BookController {
   async logBook(req) {
@@ -38,7 +38,28 @@ class BookController {
       console.log("error", e);
       return "no book exists";
     }
-    console.log("book", book);
+    // console.log("book", book);
+    return book;
+  }
+
+  async commentOnBook(req) {
+    let bookId = req.params.id;
+    console.log(req.body);
+    let comment = req.body.comment;
+    let db = req.app.locals.myDataBase;
+    let book;
+    try {
+      book = await db.findOneAndUpdate(
+        { _id: new ObjectId(bookId) },
+        { $push: { comments: comment }, $inc: { commentCount: 1 } },
+        { returnDocument: "after" }
+      );
+      console.log("hee");
+      console.log("BOOK:", book);
+    } catch (error) {
+      console.log(error);
+      return "no such book";
+    }
     return book;
   }
 }
