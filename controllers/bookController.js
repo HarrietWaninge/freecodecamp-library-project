@@ -36,6 +36,7 @@ class BookController {
       }
     } catch (e) {
       console.log("error", e);
+      return "faulty id";
     }
     console.log("book", book);
     return book;
