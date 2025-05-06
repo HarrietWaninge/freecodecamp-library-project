@@ -25,52 +25,49 @@ class BookController {
     return listOfBooks;
   }
 
-  async getBookById(req) {
-    let db = req.app.locals.myDataBase;
-    let book;
+  async findBookAndAction(action, load) {
     try {
-      book = await db.findOne({ _id: new ObjectId(req.params.id) });
-
+      let book = await action(...load);
+      // console.log("BOOK", book);
       if (!book) {
         return "no book exists";
+      } else {
+        return book;
       }
-    } catch (e) {
-      console.log("error", e);
+    } catch (err) {
+      console.log("ERROR:", err);
       return "no book exists";
     }
-    // console.log("book", book);
-    return book;
   }
 
   async commentOnBook(req) {
+    let result;
     let bookId = req.params.id;
-    console.log("ID", bookId);
-    //console.log(req.body);
+    let db = req.app.locals.myDataBase;
     let comment = req.body.comment;
-    console.log("comment:", comment);
 
     if (!comment) {
-      return "missing required field comment";
-    }
-    let db = req.app.locals.myDataBase;
-    let book;
-    try {
-      book = await db.findOneAndUpdate(
-        { _id: new ObjectId(bookId) },
-        { $push: { comments: comment }, $inc: { commentCount: 1 } },
-        { returnDocument: "after" }
-      );
-
-      if (!book) {
-        throw Error();
+      result = "missing required field comment";
+    } else {
+      try {
+        result = await this.findBookAndAction(db.findOneAndUpdate.bind(db), [
+          { _id: new ObjectId(bookId) },
+          { $push: { comments: comment }, $inc: { commentCount: 1 } },
+          { returnDocument: "after" },
+        ]);
+      } catch (error) {
+        console.log("ERROR", error);
       }
-      console.log("hee");
-      console.log("BOOK:", book);
-    } catch (error) {
-      console.log(error);
-      return "no book exists";
     }
-    return book;
+    return result;
+  }
+  async getBookById(req) {
+    let db = req.app.locals.myDataBase;
+
+    let result = await this.findBookAndAction(db.findOne.bind(db), [
+      { _id: new ObjectId(req.params.id) },
+    ]);
+    return result;
   }
 }
 
