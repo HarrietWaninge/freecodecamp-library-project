@@ -1,4 +1,4 @@
-const { ObjectId, ReturnDocument } = require("mongodb");
+const { ObjectId } = require("mongodb");
 
 class BookController {
   async logBook(req) {
@@ -47,7 +47,7 @@ class BookController {
     console.log("ID", bookId);
     //console.log(req.body);
     let comment = req.body.comment;
-    // console.log("comment:", comment);
+    console.log("comment:", comment);
 
     if (!comment) {
       return "missing required field comment";
@@ -60,11 +60,15 @@ class BookController {
         { $push: { comments: comment }, $inc: { commentCount: 1 } },
         { returnDocument: "after" }
       );
+
+      if (!book) {
+        throw Error();
+      }
       console.log("hee");
       console.log("BOOK:", book);
     } catch (error) {
       console.log(error);
-      return "no such book";
+      return "no book exists";
     }
     return book;
   }

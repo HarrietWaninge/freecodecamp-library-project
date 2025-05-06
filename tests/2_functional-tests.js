@@ -164,13 +164,21 @@ suite("Functional Tests", function () {
               assert.equal(res.body, "missing required field comment");
               done(err);
             });
-          //done();
         });
-        //       test('Test POST /api/books/[id] with comment, id not in db', function(done){
-        //         //done();
+        test("Test POST /api/books/[id] with comment, id not in db", function (done) {
+          chai
+            .request(server)
+            .keepOpen()
+            .post(`/api/books/6810b080607c0d111d150ef2`)
+            .send({ comment: createRandomString(7) })
+            .end(function (err, res) {
+              assert.equal(res.status, 200);
+              assert.equal(res.body, "no book exists");
+              done(err);
+            });
+        });
       }
     );
-    //      });
     //     suite('DELETE /api/books/[id] => delete book object id', function() {
     //       test('Test DELETE /api/books/[id] with valid id in db', function(done){
     //         //done();
