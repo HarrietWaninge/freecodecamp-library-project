@@ -153,9 +153,19 @@ suite("Functional Tests", function () {
               done(err);
             });
         });
-        //       test('Test POST /api/books/[id] without comment field', function(done){
-        //         //done();
-        //       });
+        test("Test POST /api/books/[id] without comment field", function (done) {
+          chai
+            .request(server)
+            .keepOpen()
+            .post(`/api/books/${sampleBook._id}`)
+            .send()
+            .end(function (err, res) {
+              assert.equal(res.status, 200);
+              assert.equal(res.body, "missing required field comment");
+              done(err);
+            });
+          //done();
+        });
         //       test('Test POST /api/books/[id] with comment, id not in db', function(done){
         //         //done();
       }

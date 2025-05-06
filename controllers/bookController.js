@@ -44,8 +44,14 @@ class BookController {
 
   async commentOnBook(req) {
     let bookId = req.params.id;
-    console.log(req.body);
+    console.log("ID", bookId);
+    //console.log(req.body);
     let comment = req.body.comment;
+    // console.log("comment:", comment);
+
+    if (!comment) {
+      return "missing required field comment";
+    }
     let db = req.app.locals.myDataBase;
     let book;
     try {
