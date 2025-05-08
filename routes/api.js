@@ -36,9 +36,9 @@ module.exports = function (app) {
       //response will contain new book object including atleast _id and title
     })
 
-    .delete(function (req, res) {
-      try {
-      } catch (e) {}
+    .delete(async function (req, res) {
+      let response = await BookController.deleteAllBooks(req);
+      res.json(response);
       //if successful response will be 'complete delete successful'
     });
 

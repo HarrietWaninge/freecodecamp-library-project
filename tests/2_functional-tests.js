@@ -202,6 +202,17 @@ suite("Functional Tests", function () {
             done(err);
           });
       });
+      test("Test DELETE /api/books/", function (done) {
+        chai
+          .request(server)
+          .keepOpen()
+          .delete(`/api/books`)
+          .end(function (err, res) {
+            assert.equal(res.status, 200);
+            assert.equal(res.body, "complete delete successful");
+            done(err);
+          });
+      });
     });
   });
 });

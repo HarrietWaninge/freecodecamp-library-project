@@ -86,6 +86,16 @@ class BookController {
     return result;
   }
 
+  async deleteAllBooks(req) {
+    let db = req.app.locals.myDataBase;
+    try {
+      await db.deleteMany({});
+    } catch (error) {
+      return `couldn't delete books: ${error}`;
+    }
+    return "complete delete successful";
+  }
+
   async deleteBook(req) {
     let db = req.app.locals.myDataBase;
     let bookId = req.params.id;
