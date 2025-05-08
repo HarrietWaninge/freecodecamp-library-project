@@ -71,7 +71,7 @@ class BookController {
     if (typeof book === "object" && !book.comments) {
       book.comments = [];
     }
-    console.log("BOOK:", book);
+    //  console.log("BOOK:", book);
 
     return book;
   }
