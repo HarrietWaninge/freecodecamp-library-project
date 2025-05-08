@@ -7,12 +7,12 @@ class BookController {
       const db = req.app.locals.myDataBase;
       const insertObj = await db.insertOne({
         title: req.body.title,
-        commentCount: 0,
+        commentcount: 0,
       });
       // console.log(insertObj);
       const book = await db.findOne({ _id: insertObj.insertedId });
       // console.log("book", book);
-      return [book];
+      return book;
     } else {
       return "missing required field title";
     }
@@ -21,7 +21,12 @@ class BookController {
   async getAllBooks(req) {
     let db = req.app.locals.myDataBase;
     let listOfBooks = await db.find().toArray();
-    //console.log("listOfBooks", listOfBooks);
+
+    listOfBooks.forEach((book) => {
+      this.populateBookObj(book);
+    });
+    console.log("listOfBooks", listOfBooks);
+
     return listOfBooks;
   }
 
@@ -52,7 +57,7 @@ class BookController {
       try {
         result = await this.findBookAndAction(db.findOneAndUpdate.bind(db), [
           { _id: new ObjectId(bookId) },
-          { $push: { comments: comment }, $inc: { commentCount: 1 } },
+          { $push: { comments: comment }, $inc: { commentcount: 1 } },
           { returnDocument: "after" },
         ]);
       } catch (error) {
@@ -61,12 +66,36 @@ class BookController {
     }
     return result;
   }
+
+  populateBookObj(book) {
+    if (typeof book === "object" && !book.comments) {
+      book.comments = [];
+    }
+    console.log("BOOK:", book);
+
+    return book;
+  }
   async getBookById(req) {
     let db = req.app.locals.myDataBase;
 
     let result = await this.findBookAndAction(db.findOne.bind(db), [
       { _id: new ObjectId(req.params.id) },
     ]);
+
+    result = this.populateBookObj(result);
+    return result;
+  }
+
+  async deleteBook(req) {
+    let db = req.app.locals.myDataBase;
+    let bookId = req.params.id;
+    let result = await this.findBookAndAction(db.findOneAndDelete.bind(db), [
+      { _id: new ObjectId(bookId) },
+    ]);
+
+    if (typeof result === "object") {
+      result = "delete successful";
+    }
     return result;
   }
 }

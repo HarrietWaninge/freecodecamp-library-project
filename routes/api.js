@@ -45,9 +45,6 @@ module.exports = function (app) {
   app
     .route("/api/books/:id")
     .get(async function (req, res) {
-      try {
-      } catch (e) {}
-
       let bookId = req.params.id;
       // console.log("bookid", bookId);
       let response = await BookController.getBookById(req);
@@ -66,11 +63,13 @@ module.exports = function (app) {
       //json res format same as .get
     })
 
-    .delete(function (req, res) {
+    .delete(async function (req, res) {
+      let result;
       try {
+        result = await BookController.deleteBook(req);
       } catch (e) {}
+      res.json(result);
 
-      let bookid = req.params.id;
       //if successful response will be 'delete successful'
     });
 
